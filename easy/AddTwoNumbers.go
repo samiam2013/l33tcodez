@@ -2,49 +2,39 @@ package easy
 
 // ListNode is a Definition for singly-linked list. */
 type ListNode struct {
-	Val int
+	Val  int
 	Next *ListNode
 }
 
- func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
-    nextNodeExists := true
-    carry := 0
-    output := &ListNode{}
-    nextNode := output
-    for nextNodeExists {
-        sumOfNodes := l1.Val + l2.Val + carry
-        if sumOfNodes > 9 {
-            sumLeftover := sumOfNodes % 10
-            carry = (sumOfNodes - sumLeftover)/10
-            sumOfNodes = sumLeftover
-        } else {
-            carry = 0
-        }
-        newNextNode := &ListNode{
-            Val: sumOfNodes,
-            Next: nil,
-        }
-        nextNode.Next = newNextNode
-        nextNode = newNextNode
-        
-        nextNodeExists = false
-        if l1.Next != nil || l2.Next != nil || carry != 0 {
-            nextNodeExists = true
-            if l1.Next != nil {
-                l1 = l1.Next
-            } else {
-                newL1 := &ListNode{ Val: 0, Next: nil}
-                l1.Next = newL1
-                l1 = newL1
-            }
-            if l2.Next != nil {
-                l2 = l2.Next
-            } else {
-                newL2 := &ListNode { Val: 0, Next: nil}
-                l2.Next = newL2
-                l2 = newL2
-            }
-        }
-    }
-    return output.Next
+func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
+	carry := 0
+	output := &ListNode{}
+	// have to copy the output pointer to build it without incrementing it
+	nextNode := output
+	nextNodeExists := true
+	for nextNodeExists {
+		nextNodeExists = false // false until proven true
+
+		sumOfNodes := l1.Val + l2.Val + carry
+		carry = 0
+		if sumOfNodes > 9 {
+			carry = (sumOfNodes - (sumOfNodes % 10)) / 10
+		}
+		nextNode.Next = &ListNode{ Val:  sumOfNodes % 10, Next: nil}
+		nextNode = nextNode.Next
+
+		if l1.Next != nil || l2.Next != nil || carry != 0 {
+            // ^ proof that sequence needs to continue
+			nextNodeExists = true
+			if l1.Next == nil {
+				l1.Next = &ListNode{Val: 0, Next: nil}
+			}
+			if l2.Next == nil {
+				l2.Next = &ListNode{Val: 0, Next: nil}
+			}
+			l1 = l1.Next
+			l2 = l2.Next
+		}
+	}
+	return output.Next
 }
