@@ -16,20 +16,20 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 
 		sumOfNodes := l1.Val + l2.Val
 		if sumOfNodes > 9 {
-            carry := (sumOfNodes - (sumOfNodes % 10)) / 10
-            if l1.Next != nil {
-                l1.Next.Val += carry
-            } else if l2.Next != nil {
-                l2.Next.Val += carry
-            } else {
-                l1.Next = &ListNode{ Val: carry, Next: nil }
-            }
+			carry := (sumOfNodes - (sumOfNodes % 10)) / 10
+			if l1.Next != nil {
+				l1.Next.Val += carry
+			} else if l2.Next != nil {
+				l2.Next.Val += carry
+			} else {
+				l1.Next = &ListNode{Val: carry, Next: nil}
+			}
 		}
-		nextNode.Next = &ListNode{ Val:  sumOfNodes % 10, Next: nil}
+		nextNode.Next = &ListNode{Val: sumOfNodes % 10, Next: nil}
 		nextNode = nextNode.Next
 
 		if l1.Next != nil || l2.Next != nil {
-            // ^ proof that sequence needs to continue
+			// ^ proof that sequence needs to continue
 			nextNodeExists = true
 			if l1.Next == nil {
 				l1.Next = &ListNode{Val: 0, Next: nil}
