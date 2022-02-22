@@ -103,16 +103,25 @@ func getStartPos(nums []int, target int) int {
 	percentage := float64(target-startVal) / float64(rnge)
 	guessPos := int(math.Floor(float64(len(nums)) * (percentage)))
 	incrDist := rnge / 10
+	if incrDist < 1 {
+		incrDist = 1
+	}
 	lastSearchDirection := 0
 	lastPos := 0
 	fmt.Println("startVal", startVal, "endVal", endVal, "rnge", rnge, "percentage", percentage, 
 		"guessPos", guessPos, "incrDist", incrDist)
+	const incrementLimit = 10
+	i := 0
 	for true {
+		if i++; i > incrementLimit { 
+			break
+		}
+		
 		foundVal := nums[guessPos]
 		fmt.Println("foundVal", foundVal, "lastSearchdirection", lastSearchDirection)
 		if foundVal > target {
 			if lastSearchDirection > 0 && incrDist == 1 {
-				return lastPos + 1
+				return lastPos
 			}
 			lastPos = guessPos
 			guessPos -= incrDist
