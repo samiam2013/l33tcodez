@@ -2,7 +2,6 @@ package hard
 
 import (
 	"fmt"
-	"math"
 )
 
 func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
@@ -44,11 +43,11 @@ func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 	fmt.Println("appended array", appended)
 	// at this point the lists should be appended and median can be computed
 	var center float64 = float64(len(appended)) / 2.0
-	if len(appended) % 2 == 0 {
+	if len(appended)%2 == 0 {
 		center -= 0.5
-		sum := appended[int(center - 0.5)] + appended[int(center + 0.5)]
+		sum := appended[int(center-0.5)] + appended[int(center+0.5)]
 		average := float64(sum) / 2.0
-		fmt.Println( "sum", sum, "average", average)
+		fmt.Println("sum", sum, "average", average)
 		return average
 	}
 
@@ -56,8 +55,12 @@ func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 }
 
 func mergeAppend(appended []int, nums1 []int, nums2 []int) []int {
-	fmt.Println("getStartPos nums1", nums1, "n2start", nums2[0])
-	nums1PosN2Start := getStartPos(nums1, nums2[0], len(nums1)/2, len(nums1)/4)
+	fmt.Println("getStartPos nums1", nums1, "target", nums2[0], "")
+	stepSize := len(nums1)/4
+	if stepSize < 0 {
+		stepSize = 1
+	}
+	nums1PosN2Start := getStartPos(nums1, nums2[0], len(nums1)/2, stepSize)
 	if nums1PosN2Start > 0 {
 		n := copy(appended, nums1[:nums1PosN2Start])
 		if n < nums1PosN2Start+1 {
@@ -74,7 +77,13 @@ func mergeAppend(appended []int, nums1 []int, nums2 []int) []int {
 	//  out of a for true loop is the start of the rest of that slice that
 	//  needs to be appended
 	nums2Idx := 0
+	// const iterLimit = 1000
+	// i := 0
 	for true {
+		// i++
+		// if i > iterLimit {
+		// 	break
+		// }
 		nums1Val := nums1[nums1Idx]
 		nums2Val := nums2[nums2Idx]
 		if nums1Val < nums2Val {
@@ -103,19 +112,29 @@ func mergeAppend(appended []int, nums1 []int, nums2 []int) []int {
 func getStartPos(nums []int, target, curIdx, stepSize int) int {
 	// get the position index before the target value
 	// assumes that nums are sorted
-
-	// failure mode is simply return largest negative int
-	if len(nums) == 0 {
-		return -math.MaxInt
-	}
 	
-	if nums[curIdx] >= target && nums[curIdx-1] <= target {
-		fmt.Println("gPos", curIdx, nums[curIdx], "gpos-1", nums[curIdx-1] )
+	stepSizeHalved := stepSize / 2
+	if stepSize < 2 {
+		stepSizeHalved = 1
+	}
+	stepUp := curIdx + stepSize
+	stepDown := curIdx - stepSize
+	if stepUp > len(nums) - 1 {
+		//stepUp = len(nums) - 1
+		return len(nums) - 1
+	}
+	if stepDown < 0 {
+		//stepDown = 0
+		return 0
+	}
+	if nums[curIdx] > target && nums[curIdx-1] <= target {
+		fmt.Println("gPos", curIdx, nums[curIdx], "gpos-1", 
+			nums[curIdx-1], "target", target)
 		return curIdx - 1
 	} else if nums[curIdx] > target {
-		return getStartPos(nums, target, curIdx-stepSize, stepSize/2)	
+		return getStartPos(nums, target, stepDown, stepSizeHalved)
 	} else {
-		return getStartPos(nums, target, curIdx+stepSize, stepSize/2)
+		return getStartPos(nums, target, curIdx + stepSize, stepSizeHalved)
 	}
 
 }

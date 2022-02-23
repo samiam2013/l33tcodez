@@ -1,7 +1,6 @@
 package hard
 
 import (
-	"math"
 	"reflect"
 	"testing"
 )
@@ -83,9 +82,9 @@ func Test_getStartPos(t *testing.T) {
 		{
 			name: "simple sequence",
 			args: args{
-				nums:   []int{1, 2, 3, 4, 5, 6},
-				target: 2,
-				curIdx: 0,
+				nums:     []int{1, 2, 3, 4, 5, 6},
+				target:   2,
+				curIdx:   0,
 				stepSize: 1,
 			},
 			want: 0,
@@ -93,9 +92,9 @@ func Test_getStartPos(t *testing.T) {
 		{
 			name: "hole in sequence",
 			args: args{
-				nums:   []int{1, 2, 3, 9, 14, 15, 16},
-				target: 7,
-				curIdx: 2,
+				nums:     []int{1, 2, 3, 9, 14, 15, 16},
+				target:   7,
+				curIdx:   2,
 				stepSize: 1,
 			},
 			want: 2,
@@ -103,28 +102,28 @@ func Test_getStartPos(t *testing.T) {
 		{
 			name: "negative numbers",
 			args: args{
-				nums:   []int{-17, -14, -11, -9, -3, 0, 1},
-				target: -12,
-				curIdx: 2,
+				nums:     []int{-17, -14, -11, -9, -3, 0, 1},
+				target:   -12,
+				curIdx:   2,
 				stepSize: 1,
 			},
 			want: 1,
 		},
 		{
-			name: "empty input",
-			args: args{
-				nums:   []int{},
-				target: 0,
-				curIdx: 0,
-				stepSize: 1,
-			},
-			want: -math.MaxInt,
-		},
-		{
 			name: "edge case 1",
 			args: args{
-				nums:   []int{1, 3},
-				target: 2,
+				nums:     []int{1, 3},
+				target:   2,
+				curIdx:   0,
+				stepSize: 1,
+			},
+			want: 0,
+		},
+		{
+			name: "edge case stack overflow",
+			args: args{
+				nums:   []int{4, 6, 8, 9},
+				target: 1,
 				curIdx: 0,
 				stepSize: 1,
 			},
@@ -135,8 +134,20 @@ func Test_getStartPos(t *testing.T) {
 		// 	args: args{
 		// 		nums:   []int{},
 		// 		target: 0,
+		//		curIdx: 0, 
+		//		stepSize: 1,
 		// 	},
 		// 	want: 0,
+		// },
+		// {
+		// 	name: "empty input", // this should not be possible, so
+		// 	args: args{			// I'm going to let it panic
+		// 		nums:   []int{},
+		// 		target: 0,
+		// 		curIdx: 0,
+		// 		stepSize: 1,
+		// 	},
+		// 	want: -math.MaxInt,
 		// },
 	}
 	for _, tt := range tests {
