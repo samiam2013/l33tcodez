@@ -111,49 +111,57 @@ func getStartPos(nums []int, target int) int {
 		return -math.MaxInt
 	}
 
-	startVal := nums[0]
-	endVal := nums[len(nums)-1]
-	rnge := endVal - startVal
-	percentage := float64(target-startVal) / float64(rnge)
-	guessPos := int(math.Floor(float64(len(nums)) * (percentage)))
-	incrDist := rnge / 4
+	
+	guessPos := len(nums) / 2
+	
+	incrDist := len(nums) / 4
 	if incrDist < 1 || (incrDist*2) > len(nums) {
 		incrDist = 1
 	}
 	lastSearchDirection := 0
-	lastPos := 0
-	fmt.Println("target", target, "startVal", startVal, "endVal", endVal, "rnge",
-		rnge, "percentage", percentage, "guessPos", guessPos, "incrDist", incrDist)
-	const incrementLimit = 10
-	i := 0
+	//var lastPos int
+	fmt.Println("target", target, "guessPos", guessPos, "incrDist", incrDist)
+	// const incrementLimit = 1000
+	// i := 0
 	for true {
-		if i++; i > incrementLimit {
-			break
-		}
-
+		// if i++; i > incrementLimit {
+		// 	break
+		// }
+		// if guessPos < 0 || guessPos > len(nums)-1 {
+		// 	fmt.Println("using the safety rails")
+		// 	if guessPos < 0 {
+		// 		guessPos = 0
+		// 	} else {
+		// 		guessPos = len(nums)-1
+		// 	}
+		// } 
 		foundVal := nums[guessPos]
 		fmt.Println("found", foundVal, "lastSearchdirection", lastSearchDirection)
 		if foundVal > target {
+			fmt.Println("foundVal > target: found", foundVal, "target", target)
 			if lastSearchDirection > 0 && incrDist == 1 {
-				return lastPos + 1
+				return guessPos - 1
 			}
-			lastPos = guessPos
-			guessPos -= incrDist
 			if incrDist > 1 {
 				incrDist /= 2
 			}
+			guessPos -= incrDist
 			lastSearchDirection = -1
 		} else if foundVal < target {
-			if lastSearchDirection < 0 && incrDist == 1 {
-				return lastPos - 1
+			fmt.Println("foundVal < target: found", foundVal, "target", target)
+
+			if lastSearchDirection == -1 && incrDist == 1 {
+				fmt.Println("returning guess because this was a turnaround")
+				return guessPos
 			}
-			lastPos = guessPos
-			guessPos += incrDist
 			if incrDist > 1 {
 				incrDist /= 2
 			}
+			guessPos += incrDist
 			lastSearchDirection = 1
 		} else {
+			fmt.Println("foundVal == target, last direction", lastSearchDirection)
+
 			return guessPos
 		}
 	}

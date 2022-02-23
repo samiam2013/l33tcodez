@@ -84,7 +84,7 @@ func Test_getStartPos(t *testing.T) {
 				nums:   []int{1, 2, 3, 4, 5, 6},
 				target: 2,
 			},
-			want: 1,
+			want: 0,
 		},
 		{
 			name: "hole in sequence",
@@ -92,7 +92,7 @@ func Test_getStartPos(t *testing.T) {
 				nums:   []int{1, 2, 3, 9, 14, 15, 16},
 				target: 7,
 			},
-			want: 3,
+			want: 2,
 		},
 		{
 			name: "negative numbers",
@@ -100,7 +100,7 @@ func Test_getStartPos(t *testing.T) {
 				nums:   []int{-17, -14, -11, -9, -3, 0, 1},
 				target: -12,
 			},
-			want: 2,
+			want: 1,
 		},
 		{
 			name: "empty input",
