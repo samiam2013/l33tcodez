@@ -2,6 +2,7 @@ package hard
 
 import (
 	"math"
+	"reflect"
 	"testing"
 )
 
@@ -16,19 +17,35 @@ func Test_findMedianSortedArrays(t *testing.T) {
 		want float64
 	}{
 		// TODO: Add test cases.
+		// {
+		// 	name: "Example 1",
+		// 	args: args{
+		// 		nums1: []int{1, 3},
+		// 		nums2: []int{2},
+		// 	},
+		// 	want: 2,
+		// },
+		// {
+		// 	name: "Example 2",
+		// 	args: args{
+		// 		nums1: []int{1, 2},
+		// 		nums2: []int{3, 4},
+		// 	},
+		// 	want: 2.5,
+		// },
 		{
-			name: "Example 1",
+			name: "just nums1",
 			args: args{
-				nums1: []int{1, 3},
-				nums2: []int{2},
+				nums1: []int{1, 2, 3, 4},
+				nums2: []int{},
 			},
-			want: 2,
+			want: 2.5,
 		},
 		{
-			name: "Example 2",
+			name: "just nums2",
 			args: args{
-				nums1: []int{1, 2},
-				nums2: []int{3, 4},
+				nums1: []int{},
+				nums2: []int{1, 2, 3, 4},
 			},
 			want: 2.5,
 		},
@@ -100,7 +117,7 @@ func Test_getStartPos(t *testing.T) {
 				target: 2,
 			},
 			want: 0,
-		},		
+		},
 		// {
 		// 	name: "",
 		// 	args: args{
@@ -114,6 +131,37 @@ func Test_getStartPos(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := getStartPos(tt.args.nums, tt.args.target); got != tt.want {
 				t.Errorf("getStartPos() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_mergeAppend(t *testing.T) {
+	type args struct {
+		appended   []int
+		nums1      []int
+		nums2      []int
+	}
+	tests := []struct {
+		name string
+		args args
+		want []int
+	}{
+		// TODO: Add test cases.
+		{
+			name: "merge starting with second array",
+			args: args{
+				appended: []int{},
+				nums1: []int{4, 6, 8, 9},
+				nums2: []int{1, 2, 5, 7},
+			},
+			want: []int{1, 2, 3, 4, 5, 6, 7, 8},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := mergeAppend(tt.args.appended, tt.args.nums1, tt.args.nums2); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("mergeAppend() = %v, want %v", got, tt.want)
 			}
 		})
 	}
