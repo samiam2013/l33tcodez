@@ -69,8 +69,10 @@ func Test_findMedianSortedArrays(t *testing.T) {
 
 func Test_getStartPos(t *testing.T) {
 	type args struct {
-		nums   []int
-		target int
+		nums     []int
+		target   int
+		curIdx   int
+		stepSize int
 	}
 	tests := []struct {
 		name string
@@ -83,6 +85,8 @@ func Test_getStartPos(t *testing.T) {
 			args: args{
 				nums:   []int{1, 2, 3, 4, 5, 6},
 				target: 2,
+				curIdx: 0,
+				stepSize: 1,
 			},
 			want: 0,
 		},
@@ -91,6 +95,8 @@ func Test_getStartPos(t *testing.T) {
 			args: args{
 				nums:   []int{1, 2, 3, 9, 14, 15, 16},
 				target: 7,
+				curIdx: 2,
+				stepSize: 1,
 			},
 			want: 2,
 		},
@@ -99,6 +105,8 @@ func Test_getStartPos(t *testing.T) {
 			args: args{
 				nums:   []int{-17, -14, -11, -9, -3, 0, 1},
 				target: -12,
+				curIdx: 2,
+				stepSize: 1,
 			},
 			want: 1,
 		},
@@ -107,6 +115,8 @@ func Test_getStartPos(t *testing.T) {
 			args: args{
 				nums:   []int{},
 				target: 0,
+				curIdx: 0,
+				stepSize: 1,
 			},
 			want: -math.MaxInt,
 		},
@@ -115,6 +125,8 @@ func Test_getStartPos(t *testing.T) {
 			args: args{
 				nums:   []int{1, 3},
 				target: 2,
+				curIdx: 0,
+				stepSize: 1,
 			},
 			want: 0,
 		},
@@ -129,7 +141,7 @@ func Test_getStartPos(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := getStartPos(tt.args.nums, tt.args.target); got != tt.want {
+			if got := getStartPos(tt.args.nums, tt.args.target, tt.args.curIdx, tt.args.stepSize); got != tt.want {
 				t.Errorf("getStartPos() = %v, want %v", got, tt.want)
 			}
 		})
@@ -138,9 +150,9 @@ func Test_getStartPos(t *testing.T) {
 
 func Test_mergeAppend(t *testing.T) {
 	type args struct {
-		appended   []int
-		nums1      []int
-		nums2      []int
+		appended []int
+		nums1    []int
+		nums2    []int
 	}
 	tests := []struct {
 		name string
@@ -152,8 +164,8 @@ func Test_mergeAppend(t *testing.T) {
 			name: "merge starting with second array",
 			args: args{
 				appended: []int{},
-				nums1: []int{4, 6, 8, 9},
-				nums2: []int{1, 2, 5, 7},
+				nums1:    []int{4, 6, 8, 9},
+				nums2:    []int{1, 2, 5, 7},
 			},
 			want: []int{1, 2, 3, 4, 5, 6, 7, 8},
 		},

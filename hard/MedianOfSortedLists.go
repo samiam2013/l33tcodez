@@ -45,21 +45,19 @@ func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 	// at this point the lists should be appended and median can be computed
 	var center float64 = float64(len(appended)) / 2.0
 	if len(appended) % 2 == 0 {
-		center -= .5
-		lowerVal := appended[int(math.Floor(center))]
-		upperVal := appended[int(math.Ceil(center))]
-		sum := upperVal + lowerVal
+		center -= 0.5
+		sum := appended[int(center - 0.5)] + appended[int(center + 0.5)]
 		average := float64(sum) / 2.0
-		fmt.Println("lower", lowerVal, "upper", upperVal, "sum", sum, "average", average)
+		fmt.Println( "sum", sum, "average", average)
 		return average
 	}
 
-	return float64(appended[int(math.Ceil(center))])
+	return float64(appended[int(center+0.5)])
 }
 
 func mergeAppend(appended []int, nums1 []int, nums2 []int) []int {
 	fmt.Println("getStartPos nums1", nums1, "n2start", nums2[0])
-	nums1PosN2Start := getStartPos(nums1, nums2[0])
+	nums1PosN2Start := getStartPos(nums1, nums2[0], len(nums1)/2, len(nums1)/4)
 	if nums1PosN2Start > 0 {
 		n := copy(appended, nums1[:nums1PosN2Start])
 		if n < nums1PosN2Start+1 {
@@ -70,7 +68,7 @@ func mergeAppend(appended []int, nums1 []int, nums2 []int) []int {
 	// wherever n1 ends they stop overlapping, so increment
 	//  from nums1PosN2Start+1 .. getStartPos(nums2, listRanges["n1end"])
 	fmt.Println("getStartPos nums2", nums2, "n2end", nums2[len(nums2)-1])
-	nums2PosN1End := getStartPos(nums1, nums2[len(nums2)-1])
+	nums2PosN1End := getStartPos(nums1, nums2[len(nums2)-1], len(nums2)/2, len(nums2)/4)
 	nums1Idx := nums1PosN2Start + 1 // TODO is this off by one?
 	// keep another increment on n2 so that the position when you break
 	//  out of a for true loop is the start of the rest of that slice that
@@ -102,7 +100,7 @@ func mergeAppend(appended []int, nums1 []int, nums2 []int) []int {
 	return appended
 }
 
-func getStartPos(nums []int, target int) int {
+func getStartPos(nums []int, target, curIdx, stepSize int) int {
 	// get the position index before the target value
 	// assumes that nums are sorted
 
@@ -110,60 +108,14 @@ func getStartPos(nums []int, target int) int {
 	if len(nums) == 0 {
 		return -math.MaxInt
 	}
-
 	
-	guessPos := len(nums) / 2
-	
-	incrDist := len(nums) / 4
-	if incrDist < 1 || (incrDist*2) > len(nums) {
-		incrDist = 1
+	if nums[curIdx] >= target && nums[curIdx-1] <= target {
+		fmt.Println("gPos", curIdx, nums[curIdx], "gpos-1", nums[curIdx-1] )
+		return curIdx - 1
+	} else if nums[curIdx] > target {
+		return getStartPos(nums, target, curIdx-stepSize, stepSize/2)	
+	} else {
+		return getStartPos(nums, target, curIdx+stepSize, stepSize/2)
 	}
-	lastSearchDirection := 0
-	//var lastPos int
-	fmt.Println("target", target, "guessPos", guessPos, "incrDist", incrDist)
-	// const incrementLimit = 1000
-	// i := 0
-	for true {
-		// if i++; i > incrementLimit {
-		// 	break
-		// }
-		// if guessPos < 0 || guessPos > len(nums)-1 {
-		// 	fmt.Println("using the safety rails")
-		// 	if guessPos < 0 {
-		// 		guessPos = 0
-		// 	} else {
-		// 		guessPos = len(nums)-1
-		// 	}
-		// } 
-		foundVal := nums[guessPos]
-		fmt.Println("found", foundVal, "lastSearchdirection", lastSearchDirection)
-		if foundVal > target {
-			fmt.Println("foundVal > target: found", foundVal, "target", target)
-			if lastSearchDirection > 0 && incrDist == 1 {
-				return guessPos - 1
-			}
-			if incrDist > 1 {
-				incrDist /= 2
-			}
-			guessPos -= incrDist
-			lastSearchDirection = -1
-		} else if foundVal < target {
-			fmt.Println("foundVal < target: found", foundVal, "target", target)
 
-			if lastSearchDirection == -1 && incrDist == 1 {
-				fmt.Println("returning guess because this was a turnaround")
-				return guessPos
-			}
-			if incrDist > 1 {
-				incrDist /= 2
-			}
-			guessPos += incrDist
-			lastSearchDirection = 1
-		} else {
-			fmt.Println("foundVal == target, last direction", lastSearchDirection)
-
-			return guessPos
-		}
-	}
-	return -math.MaxInt
 }
