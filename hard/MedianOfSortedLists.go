@@ -22,15 +22,15 @@ func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 
 	if appended == nil {
 		if listRanges["n1end"] > listRanges["n2start"] {
+			fmt.Println("branch 1: n1 -> n2")
 			// the lists overlap and need to be merged nums1[:(?n2start-1)] , (mix) , nums2[(?n1end+1):]
 			// find the nums 2 start pos in the nums1 slice
 			appended = mergeAppend(appended, nums1, nums2)
-
-		} else if listRanges["n2end"] > listRanges["n1start"] {
+		} else if listRanges["n2end"] < listRanges["n1start"] {
+			fmt.Println("branch 2: n2 -> n1")
 			// the lists overlap and need to be merged in the opposite order
 			// TODO reverse the logic from above
 			appended = mergeAppend(appended, nums2, nums1)
-
 		} else if listRanges["n2start"] > listRanges["n1end"] {
 			// the lists can be appended num1s first
 			appended = append(nums1, nums2...)
@@ -56,14 +56,13 @@ func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 
 func mergeAppend(appended []int, nums1 []int, nums2 []int) []int {
 	fmt.Println("getStartPos nums1", nums1, "target", nums2[0], "")
-	stepSize := len(nums1)/4
+	stepSize := len(nums1) / 4
 	if stepSize < 0 {
 		stepSize = 1
 	}
 	nums1PosN2Start := getStartPos(nums1, nums2[0], len(nums1)/2, stepSize)
 	if nums1PosN2Start > 0 {
-		n := copy(appended, nums1[:nums1PosN2Start])
-		if n < nums1PosN2Start+1 {
+		if n := copy(appended, nums1[:nums1PosN2Start]); n < nums1PosN2Start+1 {
 			panic("unthinkable: the copy operation failed")
 		}
 	}
@@ -112,29 +111,33 @@ func mergeAppend(appended []int, nums1 []int, nums2 []int) []int {
 func getStartPos(nums []int, target, curIdx, stepSize int) int {
 	// get the position index before the target value
 	// assumes that nums are sorted
-	
+
 	stepSizeHalved := stepSize / 2
 	if stepSize < 2 {
 		stepSizeHalved = 1
 	}
 	stepUp := curIdx + stepSize
 	stepDown := curIdx - stepSize
-	if stepUp > len(nums) - 1 {
+	if stepUp > len(nums)-1 {
 		//stepUp = len(nums) - 1
-		return len(nums) - 1
+		start := len(nums) - 1
+		if start < 0 {
+			start = 0
+		}
+		return start
 	}
 	if stepDown < 0 {
 		//stepDown = 0
 		return 0
 	}
 	if nums[curIdx] > target && nums[curIdx-1] <= target {
-		fmt.Println("gPos", curIdx, nums[curIdx], "gpos-1", 
+		fmt.Println("gPos", curIdx, nums[curIdx], "gpos-1",
 			nums[curIdx-1], "target", target)
 		return curIdx - 1
 	} else if nums[curIdx] > target {
 		return getStartPos(nums, target, stepDown, stepSizeHalved)
 	} else {
-		return getStartPos(nums, target, curIdx + stepSize, stepSizeHalved)
+		return getStartPos(nums, target, curIdx+stepSize, stepSizeHalved)
 	}
 
 }
