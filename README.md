@@ -1,4 +1,6 @@
 # l33tcodez
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Leetcode solutions, because why only trust leetcode with them?
 
 The useful feature of putting these here, however is that other
