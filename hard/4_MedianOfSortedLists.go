@@ -36,7 +36,6 @@ func median(nums []int) float64 {
 		return float64(nums[0])
 	}
 	center := float64(len(nums)) / 2.0
-	// fmt.Printf("center %f\n", center)
 	if len(nums)%2 == 0 && len(nums) > 1 {
 		right := int64(math.Ceil(center))
 		left := right - 1
@@ -49,9 +48,7 @@ func medianFromLists(lower, upper []int) float64 {
 	totalLength := len(lower) + len(upper)
 	center := float64(totalLength) / 2.0
 
-	i, j := 0, 0
-	var lastV, curV int
-	cIdx := 0
+	i, j, lastV, curV, cIdx := 0, 0, 0, 0, 0
 	for {
 		if float64(cIdx) > center {
 			break
@@ -66,7 +63,6 @@ func medianFromLists(lower, upper []int) float64 {
 				curV = upper[j]
 				j++
 			}
-			//fmt.Printf("curV %d, i %d, j %d\n", curV, i, j)
 		} else {
 			// one or the other doesn't exist, use the existing
 			if j < len(upper) {
@@ -77,18 +73,13 @@ func medianFromLists(lower, upper []int) float64 {
 				i++
 			}
 		}
-
 		cIdx++
-		// fmt.Printf("lastV %d, curV %d\n", lastV, curV)
 	}
 	if (len(lower)+len(upper))%2 == 0 {
 		avg := (float64(lastV) + float64(curV)) / 2.0
-		// fmt.Printf("average %f\n", avg)
-
 		return avg
 	}
 	return float64(curV)
-
 }
 
 func maxOf(a, b int) int {
