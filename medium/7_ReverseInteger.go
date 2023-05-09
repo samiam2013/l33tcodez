@@ -1,5 +1,10 @@
 package medium
 
+import (
+    "strconv"
+    "math"
+)
+
 func reverse(x int) int {
     s := []rune(strconv.Itoa(x))
     negative := false
