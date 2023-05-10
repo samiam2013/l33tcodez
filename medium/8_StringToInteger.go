@@ -6,14 +6,14 @@ import (
 )
 
 func myAtoi(s string) int {
-    si := 0 // shared index
-    positive := true
+    // positive factor for multiplication and shared string index
+    var positive, si int = 1, 0
     for si < len(s) {
         if s[si] == '+' {
             si++
             break
         } else if s[si] == '-' {
-            positive = false
+            positive = -1
             si++
             break
         } else if s[si] != ' ' {
@@ -21,48 +21,47 @@ func myAtoi(s string) int {
         }
         si++
     }
-    numS := ""
+    
+    var numSB strings.Builder
     for si < len(s) {
-        if rune(s[si]) >= '0' && rune(s[si]) <= '9' {
-            numS += string(s[si])
-        } else {
+        if rune(s[si]) < '0' || rune(s[si]) > '9'{
             break
         }
+        numSB.Write([]byte{s[si]})
         si++
     }
+    numS := numSB.String()
     if numS == "" {
         return 0
     }
-    var sum int64
-    magPow := 0
+
+    var sum, magPow  int
     for i := len(numS)-1; i >= 0; i-- {
-        digit := (int64(numS[i])-48)
-        magnitude := int64(math.Pow(10, float64(magPow)))
+        digit := int(numS[i])-48
+        magnitude := int(math.Pow(10, float64(magPow)))
         if digit != 0 && (magPow > 9 || magnitude > (math.MaxInt32/digit)) {
-            if !positive {
+            if positive < 0 {
                 return math.MinInt32
             }
             return math.MaxInt32
         } 
         sum += digit * magnitude 
         if sum > math.MaxInt32 {
-            if !positive{
+            if positive < 0 {
                 return math.MinInt32
             }
             return math.MaxInt32
         }
         if sum < math.MinInt32{
-            if !positive {
+            if positive < 0 {
                 return math.MaxInt32
             }
             return math.MinInt32
         }
         magPow++
-        fmt.Println("rune", string(numS[i]),"int",int(numS[i]), "sum",sum)
+        // fmt.Println("rune", string(numS[i]),"int",int(numS[i]), "sum",sum)
     }
-    if !positive {
-        sum = -1 * sum
-    }
+    sum *= positive
 
-    return int(sum)
+    return sum
 }
