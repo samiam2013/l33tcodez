@@ -8,16 +8,18 @@ import (
 func myAtoi(s string) int {
 	// positive factor for multiplication and shared string index
 	var positive, si int = 1, 0
+outerLoop:
 	for si < len(s) {
-		if s[si] == '+' {
+		switch {
+		case s[si] == '+':
 			si++
-			break
-		} else if s[si] == '-' {
+			break outerLoop
+		case s[si] == '-':
 			positive = -1
 			si++
-			break
-		} else if s[si] != ' ' {
-			break
+			break outerLoop
+		case s[si] != ' ':
+			break outerLoop
 		}
 		si++
 	}

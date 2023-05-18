@@ -17,11 +17,12 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 		sumOfNodes := l1.Val + l2.Val
 		if sumOfNodes > 9 {
 			carry := (sumOfNodes - (sumOfNodes % 10)) / 10
-			if l1.Next != nil {
+			switch {
+			case l1.Next != nil:
 				l1.Next.Val += carry
-			} else if l2.Next != nil {
+			case l2.Next != nil:
 				l2.Next.Val += carry
-			} else {
+			default:
 				l1.Next = &ListNode{Val: carry, Next: nil}
 			}
 		}

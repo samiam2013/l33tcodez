@@ -38,7 +38,7 @@ func intToRoman(num int) (numerals string) {
 }
 
 func keys(m map[int]string) (keys []int) {
-	for k, _ := range m {
+	for k := range m {
 		keys = append(keys, k)
 	}
 	return
