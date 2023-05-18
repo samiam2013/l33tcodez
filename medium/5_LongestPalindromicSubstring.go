@@ -8,8 +8,7 @@ func longestPalindrome(s string) string {
 	for startPos := range s {
 		for endPos := startPos; endPos <= len(s); endPos++ {
 			candidate := s[startPos:endPos]
-			// fmt.Println("candidate:", candidate,
-			//     "start:", startPos,"end",endPos)
+			// fmt.Println("candidate:", candidate, "start:", startPos,"end",endPos)
 			if isPalindromeS(candidate) {
 				palindromes = append(palindromes, candidate)
 			}
@@ -25,7 +24,7 @@ func longestPalindrome(s string) string {
 }
 
 func isPalindromeS(s string) bool {
-	for i := 0; i < len(s)/2; i++ { // TODO does this need <= compare instead
+	for i := 0; i < len(s)/2; i++ {
 		j := (len(s) - 1) - i
 		if s[i] != s[j] {
 			return false

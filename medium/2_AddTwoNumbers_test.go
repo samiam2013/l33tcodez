@@ -15,7 +15,6 @@ func Test_addTwoNumbers(t *testing.T) {
 		args args
 		want *ListNode
 	}{
-		// TODO: Add test cases.
 		{
 			name: "first case 243+564=708",
 			args: args{
