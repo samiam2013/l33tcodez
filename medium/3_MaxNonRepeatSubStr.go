@@ -27,13 +27,3 @@ func maxOf(a, b int) int {
 	}
 	return b
 }
-
-// func maxOf(nums ...int) int {
-// 	var max int
-// 	for _, val := range nums {
-// 		if (val > max) {
-// 			max = val
-// 		}
-// 	}
-// 	return max
-// }
