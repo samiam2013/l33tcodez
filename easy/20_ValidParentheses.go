@@ -1,12 +1,14 @@
 package easy
 
-var opp = map[byte]byte{
-	'(': ')',
-	'[': ']',
-	'{': '}'}
-
 func isValid(s string) bool {
-	open := make([]byte, 0)
+	if len(s) == 0 || len(s)%2 == 1 {
+		return false
+	}
+	opp := map[byte]byte{
+		'(': ')',
+		'[': ']',
+		'{': '}'}
+	open := make([]byte, 0, len(s)/2)
 	for i := 0; i < len(s); i++ {
 		r := s[i]
 		switch {
