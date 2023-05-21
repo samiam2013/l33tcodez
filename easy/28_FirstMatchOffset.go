@@ -4,20 +4,17 @@ func strStr(haystack string, needle string) int {
 	if len(haystack) == 0 {
 		return -1
 	}
-	needleHas := map[rune]struct{}{}
-	for _, b := range needle {
-		needleHas[b] = struct{}{}
+	needleHas := make(map[byte]struct{}, len(needle))
+	for i := 0; i < len(needle); i++ {
+		needleHas[needle[i]] = struct{}{}
 	}
 	ln := len(needle)
-	// fmt.Println("needle len", ln)
-	// fmt.Printf("i := %d; i <= %d; i += %d\n", ln-1, len(haystack), ln)
 	for i := ln - 1; i < len(haystack); i += ln {
-		secStart := (i - ln) + 1
-		secEnd := secStart + ln
-		// fmt.Printf("section [%d:%d] %s\n",
-		// 	secStart, secEnd, haystack[secStart:secEnd])
-		if _, ok := needleHas[rune(haystack[i])]; ok {
-			for j := secStart; j < secEnd; j++ {
+		if _, ok := needleHas[haystack[i]]; ok {
+			for j := (i - ln) + 1; j < ((i-ln)+1)+ln; j++ {
+				if haystack[j] != needle[0] {
+					continue
+				}
 				if len(haystack) >= j+ln && haystack[j:j+ln] == needle {
 					return j
 				}
