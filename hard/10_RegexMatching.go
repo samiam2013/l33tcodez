@@ -1,6 +1,7 @@
 package hard
 
 func isMatch(s string, p string) bool {
+	// leetcode doesn't prevent you from using the regexp package
 	// r := regexp.MustCompile("^"+p+"$")
 	// return r.MatchString(s)
 
@@ -16,15 +17,16 @@ func isMatch(s string, p string) bool {
 	for i := 0; i <= len(s); i++ {
 		for j := 0; j <= len(p); j++ {
 			// if we haven't started traversing the pattern or string it can only match
-			if i == 0 && j == 0 {
+			switch {
+			case i == 0 && j == 0:
 				dp[i][j] = true
 				continue
 				// if we haven't started traversing the string, we can only match if the pattern is a star
-			} else if i == 0 {
+			case i == 0:
 				dp[i][j] = ((j-1)%2 == 1 && p[j-1] == '*' && dp[i][j-2])
 				continue
 				// if we haven't started traversing the pattern, we can't match
-			} else if j == 0 {
+			case j == 0:
 				dp[i][j] = false
 				continue
 			}
@@ -40,7 +42,7 @@ func isMatch(s string, p string) bool {
 					dp[i][j] = dp[i-1][j]
 				}
 				// or if the previous to last pattern match
-				if dp[i][j-2] == true {
+				if dp[i][j-2] {
 					dp[i][j] = true
 				}
 			}
