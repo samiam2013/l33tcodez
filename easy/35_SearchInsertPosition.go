@@ -6,13 +6,16 @@ func searchInsert(nums []int, target int) int {
 	midpoint := len(nums) / 2
 	// if the length of nums is 0 it's 0
 	// if it's lower than the lowest number return 0
-	if len(nums) == 0 || target < nums[0] {
+	if len(nums) == 0 || target <= nums[0] {
 		return 0
 	}
 	if target > nums[len(nums)-1] {
 		return len(nums)
 	}
 	for {
+		if strideLen < 1 {
+			strideLen = 1
+		}
 		// hit a match
 		if nums[midpoint] == target {
 			return midpoint
@@ -22,7 +25,7 @@ func searchInsert(nums []int, target int) int {
 			return midpoint + 1
 		}
 		// if this number and the previous one are on either side of the target, return this index
-		if midpoint < len(nums)-1 && (nums[midpoint-1] < target && nums[midpoint] > target) {
+		if midpoint <= len(nums)-1 && (nums[midpoint-1] < target && nums[midpoint] > target) {
 			return midpoint
 		}
 
